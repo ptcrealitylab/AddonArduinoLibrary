@@ -43,32 +43,32 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef HybridObject_h
-#define HybridObject_h
+#ifndef SpatialToolbox_h
+#define SpatialToolbox_h
 
 #include "Arduino.h"
 
-class HybridObject {
+class SpatialToolbox {
  
     public:
-        HybridObject() {};
+        SpatialToolbox() {};
         static void update();
         static void developer();
-        static void add(char * obj, char * pos, String plugin = "default");
-        static void write(char *  object, char * pos, float data);
-        static void writeStepUp(char * obj, char * pos);
-        static void writeStepDown(char * obj, char * pos);
-        static void writeStepUp(char * obj, char * pos, int steps);
-        static void writeStepDown(char * obj, char * pos, int steps);
-        static void writeStepSerial(char * obj, char * pos, int steps, bool direction);
-        static void writeDigital(char * obj, char * pos, bool data);
+        static void add(String obj2, String pos2, String plugin = "default");
+        static void write(String  object2, String pos2, float data);
+        static void writeStepUp(String obj2, String pos2);
+        static void writeStepDown(String obj2, String pos2);
+        static void writeStepUp(String obj2, String pos2, int steps);
+        static void writeStepDown(String obj2, String pos2, int steps);
+        static void writeStepSerial(String obj2, String pos2, int steps, bool direction);
+        static void writeDigital(String obj2, String pos2, bool data);
         static void writeFaster(int pos, float data);
 
-        static float read(char * obj, char * pos);
-        static int   stepAvailable(char * obj, char * pos);
-        static int   stepAvailable(char *  obj, char *  pos, int steps);
-        static bool  readDigital(char * obj, char * pos);
-        static bool  readDigital(char *  obj, char *  pos, float threshold);
+        static float read(String obj2, String pos2);
+        static int   stepAvailable(String obj2, String pos2);
+        static int   stepAvailable(String  obj2, String  pos2, int steps);
+        static bool  readDigital(String obj2, String pos2);
+        static bool  readDigital(String  obj2, String  pos2, float threshold);
 
     static float readFaster(int pos);
         static int printObjects();

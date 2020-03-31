@@ -44,7 +44,7 @@
  */
 
 //#include "Arduino.h"
-#include "HybridObject.h"
+#include "SpatialToolbox.h"
 
 #define BUFFERLENGTH 200
 #define SERIALBUFFERLENGTH 400
@@ -57,38 +57,38 @@
 #endif
 
 void serialEventRun() {
-    HybridObject::update();
+    SpatialToolbox::update();
 }
 
-bool HybridObject::clearState = false;
-bool HybridObject::starter = false;
-bool HybridObject::developerStatus = false;
-bool HybridObject::runInit = true;
-int HybridObject::caseSteper = 9999;
-int HybridObject::arraySize = 0;
-unsigned int  HybridObject::objectInt = 0;
-char HybridObject::str[SERIALBUFFERLENGTH + 1];
-char HybridObject::floatStr[FLOATSTRBUFFER + 1];
-char *HybridObject::object = new char[BUFFERLENGTH + 1];
-float HybridObject::tempFloatBuffer = 0.0;
+bool SpatialToolbox::clearState = false;
+bool SpatialToolbox::starter = false;
+bool SpatialToolbox::developerStatus = false;
+bool SpatialToolbox::runInit = true;
+int SpatialToolbox::caseSteper = 9999;
+int SpatialToolbox::arraySize = 0;
+unsigned int  SpatialToolbox::objectInt = 0;
+char SpatialToolbox::str[SERIALBUFFERLENGTH + 1];
+char SpatialToolbox::floatStr[FLOATSTRBUFFER + 1];
+char *SpatialToolbox::object = new char[BUFFERLENGTH + 1];
+float SpatialToolbox::tempFloatBuffer = 0.0;
 
 
-float *HybridObject::floatObjectArray =
+float *SpatialToolbox::floatObjectArray =
         (float *) malloc(sizeof(float) * arraySize);
 
-float *HybridObject::floatObjectArrayOld =
+float *SpatialToolbox::floatObjectArrayOld =
         (float *) malloc(sizeof(float) * arraySize);
 
-bool *HybridObject::plusObjectArray =
+bool *SpatialToolbox::plusObjectArray =
         (bool *) malloc(sizeof(bool) * arraySize);
 
-bool *HybridObject::minusObjectArray =
+bool *SpatialToolbox::minusObjectArray =
         (bool *) malloc(sizeof(bool) * arraySize);
 
-char **HybridObject::stringArray =
+char **SpatialToolbox::stringArray =
         (char **) malloc(sizeof(char *) * arraySize);
 
-void HybridObject::update() {
+void SpatialToolbox::update() {
 
     //  Serial.println("");
 
@@ -239,25 +239,20 @@ void HybridObject::update() {
 
 }
 
-void HybridObject::developer() {
+void SpatialToolbox::developer() {
     developerStatus = true;
     init();
 }
 
-void HybridObject::add(char *obj, char *pos, String plugin) {
+void SpatialToolbox::add(String obj2, String pos2, String plugin) {
     init();
+
+    char * obj = &*obj2.begin();
+    char * pos = &*pos2.begin();
 
     strcpy(object, pos);
     strcat(object, "\t");
     strcat(object, obj);
-
-    /* Serial1.print("a\n");
-     Serial1.print(object);
-     Serial1.print("\n");
-     Serial1.print(arraySize);
-     Serial1.print("\n");
-     Serial1.print(plugin);
-     Serial1.print("\n");*/
 
     char *objectPointer;
     objectPointer = (char *) malloc(strlen(obj) + strlen(pos) + 2);
@@ -285,13 +280,15 @@ void HybridObject::add(char *obj, char *pos, String plugin) {
 
 }
 
-int HybridObject::printObjects() {
+int SpatialToolbox::printObjects() {
     for (int i = 0; i < arraySize; i++) {
         Serial1.println(stringArray[i]);
     }
 }
 
-float HybridObject::read(char *obj, char *pos) {
+float SpatialToolbox::read(String obj2, String pos2) {
+    char * obj = &*obj2.begin();
+    char * pos = &*pos2.begin();
 
     strcpy(object, pos);
     strcat(object, "\t");
@@ -308,11 +305,15 @@ float HybridObject::read(char *obj, char *pos) {
     return 0;
 }
 
-int HybridObject::stepAvailable(char *obj, char *pos) {
+int SpatialToolbox::stepAvailable(String obj2, String pos2) {
+    char * obj = &*obj2.begin();
+    char * pos = &*pos2.begin();
     return stepAvailable(obj, pos, 1);
 }
 
-int HybridObject::stepAvailable(char *obj, char *pos, int steps) {
+int SpatialToolbox::stepAvailable(String obj2, String pos2, int steps) {
+    char * obj = &*obj2.begin();
+    char * pos = &*pos2.begin();
 
     strcpy(object, pos);
     strcat(object, "\t");
@@ -380,11 +381,15 @@ int HybridObject::stepAvailable(char *obj, char *pos, int steps) {
 
 }
 
-bool HybridObject::readDigital(char *obj, char *pos) {
+bool SpatialToolbox::readDigital(String obj2, String pos2) {
+    char * obj = &*obj2.begin();
+    char * pos = &*pos2.begin();
     readDigital(obj, pos, 0.5);
 }
 
-bool HybridObject::readDigital(char *obj, char *pos, float threshold) {
+bool SpatialToolbox::readDigital(String obj2, String pos2, float threshold) {
+    char * obj = &*obj2.begin();
+    char * pos = &*pos2.begin();
 
     if (threshold > 1.0) threshold = 1.0;
     if (threshold < 0.0) threshold = 0.0;
@@ -405,11 +410,13 @@ bool HybridObject::readDigital(char *obj, char *pos, float threshold) {
 }
 
 
-float HybridObject::readFaster(int pos) {
+float SpatialToolbox::readFaster(int pos) {
     return floatObjectArray[pos];
 }
 
-void HybridObject::write(char *obj, char *pos, float data) {
+void SpatialToolbox::write(String obj2, String pos2, float data) {
+    char * obj = &*obj2.begin();
+    char * pos = &*pos2.begin();
 
     strcpy(object, pos);
     strcat(object, "\t");
@@ -449,23 +456,33 @@ void HybridObject::write(char *obj, char *pos, float data) {
     }
 }
 
-void HybridObject::writeStepUp(char *obj, char *pos) {
+void SpatialToolbox::writeStepUp(String obj2, String pos2) {
+    char * obj = &*obj2.begin();
+    char * pos = &*pos2.begin();
     writeStepUp(obj, pos, 1);
 }
 
-void HybridObject::writeStepDown(char *obj, char *pos) {
+void SpatialToolbox::writeStepDown(String obj2, String pos2) {
+    char * obj = &*obj2.begin();
+    char * pos = &*pos2.begin();
     writeStepDown(obj, pos, 1);
 }
 
-void HybridObject::writeStepUp(char *obj, char *pos, int steps) {
+void SpatialToolbox::writeStepUp(String obj2, String pos2, int steps) {
+    char * obj = &*obj2.begin();
+    char * pos = &*pos2.begin();
     writeStepSerial(obj, pos, steps, true);
 }
 
-void HybridObject::writeStepDown(char *obj, char *pos, int steps) {
+void SpatialToolbox::writeStepDown(String obj2, String pos2, int steps) {
+    char * obj = &*obj2.begin();
+    char * pos = &*pos2.begin();
     writeStepSerial(obj, pos, steps, false);
 }
 
-void HybridObject::writeStepSerial(char *obj, char *pos, int steps, bool direction) {
+void SpatialToolbox::writeStepSerial(String obj2, String pos2, int steps, bool direction) {
+    char * obj = &*obj2.begin();
+    char * pos = &*pos2.begin();
 
     strcpy(object, pos);
     strcat(object, "\t");
@@ -501,7 +518,9 @@ void HybridObject::writeStepSerial(char *obj, char *pos, int steps, bool directi
         }
 }
 
-void HybridObject::writeDigital(char *obj, char *pos, bool data) {
+void SpatialToolbox::writeDigital(String obj2, String pos2, bool data) {
+    char * obj = &*obj2.begin();
+    char * pos = &*pos2.begin();
 
     strcpy(object, pos);
     strcat(object, "\t");
@@ -544,7 +563,7 @@ void HybridObject::writeDigital(char *obj, char *pos, bool data) {
 
 }
 
-void HybridObject::writeFaster(int pos, float data) {
+void SpatialToolbox::writeFaster(int pos, float data) {
     //indicate that its floating
     Serial1.print("f\n");
     Serial1.print(pos);
@@ -556,7 +575,7 @@ void HybridObject::writeFaster(int pos, float data) {
 }
 
 
-float HybridObject::map(float x, float in_min, float in_max) {
+float SpatialToolbox::map(float x, float in_min, float in_max) {
     if (x > in_max) x = in_max;
     if (x < in_min) x = in_min;
 
@@ -566,7 +585,7 @@ float HybridObject::map(float x, float in_min, float in_max) {
 }
 
 
-void HybridObject::init() {
+void SpatialToolbox::init() {
     if (runInit) {
         //     for(int i = 0; i <30; i++){
 
@@ -589,7 +608,7 @@ void HybridObject::init() {
     }
 }
 
-void HybridObject::sendDeveloper() {
+void SpatialToolbox::sendDeveloper() {
     Serial1.print("def\n");
     if (developerStatus) {
         Serial1.print("1\n");
